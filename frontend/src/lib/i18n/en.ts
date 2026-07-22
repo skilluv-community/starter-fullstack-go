@@ -1,4 +1,6 @@
-export default {
+import type { Dict } from './types';
+
+const en: Dict = {
   title: 'Skilluv starter — fullstack Go',
   tagline: 'Gin + sqlx + PostgreSQL backend, SvelteKit 5 frontend.',
   greeting_button: 'Say hello',
@@ -8,4 +10,6 @@ export default {
   notes_add: 'Add',
   notes_empty: 'No notes yet.',
   lang_switch: 'FR'
-} as const;
+};
+
+export default en;
