@@ -1,0 +1,44 @@
+services:
+  postgres:
+    image: postgres:18-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-skilluv}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-skilluv}
+      POSTGRES_DB: ${POSTGRES_DB:-skilluv}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-skilluv}"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+
+  backend:
+    build: ./backend
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgres://${POSTGRES_USER:-skilluv}:${POSTGRES_PASSWORD:-skilluv}@postgres:5432/${POSTGRES_DB:-skilluv}?sslmode=disable
+      BACKEND_PORT: 3001
+      GIN_MODE: debug
+      CORS_ORIGIN: http://localhost:5173
+    ports:
+      - "3001:3001"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  frontend:
+    build: ./frontend
+    restart: unless-stopped
+    environment:
+      PUBLIC_API_BASE: http://localhost:3001
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+
+volumes:
+  pgdata:

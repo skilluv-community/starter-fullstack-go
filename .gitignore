@@ -1,0 +1,27 @@
+# Go
+backend/bin/
+backend/tmp/
+backend/*.exe
+
+# Node
+frontend/node_modules/
+frontend/.svelte-kit/
+frontend/build/
+frontend/.vite/
+
+# Env
+.env
+.env.local
+!.env.example
+
+# Test
+frontend/test-results/
+frontend/playwright-report/
+frontend/blob-report/
+
+# IDE
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+*.log
